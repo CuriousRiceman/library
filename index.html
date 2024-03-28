@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <title>Document</title>
+    <script src="yava.js" defer></script>
+</head>
+<body>
+    <div class="header">
+       <h1>Books.</h1>
+    </div>
+    <div class="book-add-container">
+        <button type="button" id="add-book">Add book</button>
+        <dialog id="new-book-dialog">
+            <form id="book-form">
+                <label for="title">Title:</label><br>
+                <input type="text" id="title" name="title"><br>
+                <label for="author">Author:</label><br>
+                <input type="text" id="author" name="author"><br>
+                <label for="pages">Number of Pages:</label><br>
+                <input type="number" id="pages" name="pages"><br>
+                <label for="read">Have you read it?</label>
+                <input type="checkbox" id="read" name="read"><br>
+                <button type="submit" id="submit-book">Add Book</button>
+                <button type="button" id="close-button">Close</button>
+            </form>
+        </dialog>
+    </div>
+    <div class="book-display">
+
+    </div>
+</body>
+</html>
