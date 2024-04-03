@@ -9,93 +9,87 @@ const titleInput = document.querySelector('#title');
 const authorInput = document.querySelector('#author');
 const pagesInput = document.querySelector('#pages');
 const readCheckbox = document.querySelector('#read');
-const toggleButton = document.querySelector(".toggle-read");
 
-function Book(title, author, pageNum, readOrNah) {
-  this.title = title;
-  this.author = author;
-  this.pageNum = pageNum;
-  this.readOrNah = readOrNah;
-  this.info = function() {
-    console.log(title + " by " + author + ", " + pageNum + " pages, " + readOrNah);
-  };
+class Book {
+  constructor(title, author, pageNum, readOrNah) {
+    this.title = title;
+    this.author = author;
+    this.pageNum = pageNum;
+    this.readOrNah = readOrNah;
+  }
+
+  info() {
+    console.log(`${this.title} by ${this.author}, ${this.pageNum} pages, ${this.readOrNah}`);
+  }
+
+  toggleRead() {
+    this.readOrNah = !this.readOrNah;
+  }
 }
 
 function addBookToLibrary(title, author, pageNum, readOrNah) {
-    const book = new Book(title, author, pageNum, readOrNah);
-    myLibrary.push(book);
-}
-
-function readYet(readOrNah) {
-    if (readOrNah) {
-        return "Already read";
-    } else {
-        return "Not read";
-    }
+  const book = new Book(title, author, pageNum, readOrNah);
+  myLibrary.push(book);
 }
 
 function displayBooks(bookObject, index) {
-    const bookCard = document.createElement("div");
-    const bookTitle = document.createElement("p");
-    const authorName = document.createElement("p");
-    const pageAmount = document.createElement("p");
-    const read = document.createElement("button");
-    const removeButton = document.createElement("button");
+  const bookCard = document.createElement("div");
+  const bookTitle = document.createElement("p");
+  const authorName = document.createElement("p");
+  const pageAmount = document.createElement("p");
+  const read = document.createElement("button");
+  const removeButton = document.createElement("button");
 
-    bookCard.classList.add("book-card");
-    bookCard.setAttribute("data-index", index);
-    read.classList.add("toggle-read");
-    removeButton.textContent = "Remove";
-    removeButton.classList.add("remove-book");
-    removeButton.addEventListener("click", () => removeBook(index));
-    bookTitle.textContent = bookObject.title;
-    authorName.textContent = bookObject.author;
-    pageAmount.textContent = bookObject.pageNum;
-    read.textContent = readYet(bookObject.readOrNah);
-    read.addEventListener("click", () => bookObject.changeRead(index));
+  bookCard.classList.add("book-card");
+  bookCard.setAttribute("data-index", index);
+  read.classList.add("toggle-read");
+  removeButton.textContent = "Remove";
+  removeButton.classList.add("remove-book");
+  removeButton.addEventListener("click", () => removeBook(index));
+  bookTitle.textContent = bookObject.title;
+  authorName.textContent = bookObject.author;
+  pageAmount.textContent = bookObject.pageNum;
+  read.textContent = bookObject.readOrNah ? "Already read" : "Not read";
+  read.addEventListener("click", () => {
+    bookObject.toggleRead();
+    loopArray();
+  });
 
-    bookCard.appendChild(bookTitle);
-    bookCard.appendChild(authorName);
-    bookCard.appendChild(pageAmount);
-    bookCard.appendChild(read);
-    bookCard.appendChild(removeButton);
-    bookDisplay.appendChild(bookCard);
+  bookCard.appendChild(bookTitle);
+  bookCard.appendChild(authorName);
+  bookCard.appendChild(pageAmount);
+  bookCard.appendChild(read);
+  bookCard.appendChild(removeButton);
+  bookDisplay.appendChild(bookCard);
 }
 
 function removeBook(index) {
-    myLibrary.splice(index, 1); /* index to remove, number of elements to remove */
-    loopArray();
+  myLibrary.splice(index, 1);
+  loopArray();
 }
 
 function loopArray() {
-    const libraryLength = myLibrary.length;
-    bookDisplay.textContent = ""; /* Set to blank so we can display cards via looping other wise it duplicates */
-    for (let i = 0; i < libraryLength; i++) {
-        const bookObject = myLibrary[i];
-        displayBooks(bookObject, i);
-    }
+  bookDisplay.textContent = "";
+  myLibrary.forEach((book, index) => {
+    displayBooks(book, index);
+  });
 }
 
-Book.prototype.changeRead = function(index) {
-    myLibrary[index].readOrNah = !myLibrary[index].readOrNah;
-    loopArray();
-};
-
-addBook.addEventListener("click", (event) => {
-    dialog.showModal();
+addBook.addEventListener("click", () => {
+  dialog.showModal();
 });
 
 submitButton.addEventListener("click", (event) => {
-    event.preventDefault();
-    const titleValue = titleInput.value;
-    const authorValue = authorInput.value;
-    const pageValue = pagesInput.value;
-    const readValue = readCheckbox.checked;
-    dialog.close();
-    addBookToLibrary(titleValue, authorValue, pageValue, readValue);
-    loopArray();
+  event.preventDefault();
+  const titleValue = titleInput.value;
+  const authorValue = authorInput.value;
+  const pageValue = pagesInput.value;
+  const readValue = readCheckbox.checked;
+  dialog.close();
+  addBookToLibrary(titleValue, authorValue, pageValue, readValue);
+  loopArray();
 });
 
 closeButton.addEventListener("click", () => {
-    dialog.close();
+  dialog.close();
 });
